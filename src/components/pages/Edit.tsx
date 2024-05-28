@@ -35,7 +35,7 @@ const bioSchema = z
 
 const images = ["/images/4.png"];
 
-const Home = () => {
+const Edit = () => {
   const { user } = useUser();
   const [linksData, setLinksData] = useState<any>();
   const [imagesData, setImagesData] = useState<any>();
@@ -323,4 +323,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Edit;

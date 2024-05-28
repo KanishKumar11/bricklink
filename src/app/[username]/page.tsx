@@ -8,7 +8,7 @@ import { IoMdColorPalette } from "react-icons/io";
 import { BiSolidPencil } from "react-icons/bi";
 import { RiUploadLine } from "react-icons/ri";
 import Image from "next/image";
-import { User } from "@/models/user.model";
+import { User } from "@/models/user.models";
 import Error from "next/error";
 const links = [
   {

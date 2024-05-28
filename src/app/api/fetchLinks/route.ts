@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDb from "@/lib/connectDb";
-import { User } from "@/models/user.model";
+import { User } from "@/models/user.models";
 import { NextRequest, NextResponse } from "next/server";
 
 type Data = {

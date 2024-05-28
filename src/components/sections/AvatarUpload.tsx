@@ -34,12 +34,12 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
   return (
     <>
       {userData?.avatar ? (
-        <div className="h-[124px] w-[124px] bg-[#F5F3F3] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-lg leading-5 text-center gap-3 relative">
+        <div className="h-[96px] w-[96px]  flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-lg leading-5 text-center gap-3 relative">
           <Image
             src={userData?.avatar}
             alt="User Image"
-            width={124}
-            height={124}
+            width={96}
+            height={96}
             className="rounded-xl"
           />
           {isEditing && (
@@ -52,8 +52,8 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
                   widget.close();
                 }}
               >
-                <div className="h-[124px] w-[124px] bg-[#F5F3F3] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-lg leading-5 text-center gap-3">
-                  <span className="bg-[#a0a4a8] text-[#F5F3F3] p-2 rounded-md text-xl">
+                <div className="h-[96px] w-[96px] bg-[#F5F3F3] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-base leading-5 text-center gap-3">
+                  <span className="bg-[#a0a4a8] text-[#F5F3F3] p-2 rounded-md text-lg">
                     <RiUploadLine />
                   </span>
                   upload
@@ -72,12 +72,11 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
             widget.close();
           }}
         >
-          <div className="h-[124px] w-[124px] bg-[#F5F3F3] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-lg leading-5 text-center gap-3">
-            <span className="bg-[#a0a4a8] text-[#F5F3F3] p-2 rounded-md text-xl">
+          <div className="h-[96px] w-[96px] bg-[#F5F3F3] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-xs leading-5 text-center gap-3 p-2">
+            <span className="bg-[#a0a4a8] text-[#F5F3F3] p-2 rounded-md text-sm">
               <RiUploadLine />
             </span>
             upload
-            <br /> image
           </div>
         </CldUploadButton>
       )}

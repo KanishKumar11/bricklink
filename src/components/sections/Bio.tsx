@@ -17,7 +17,7 @@ const Bio: React.FC<BioProps> = ({
   bioError,
 }) => {
   return (
-    <div className="text-white euclid text-lg">
+    <div className="text-[#637381] euclid text-lg">
       {isEditing ? (
         <>
           <input
@@ -28,7 +28,7 @@ const Bio: React.FC<BioProps> = ({
           {bioError && <p className="text-red-500">{bioError}</p>}
         </>
       ) : (
-        <p>{userData?.bio || "Your Bio (150 words)"}</p>
+        <p>{bio || "Your Bio (150 words)"}</p>
       )}
     </div>
   );

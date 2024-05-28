@@ -1,24 +1,22 @@
 import Navbar from "@/components/Navbar";
-import TitleBtn from "@/components/TitleBtn";
 import { SignUp } from "@clerk/nextjs";
-import { PencilRuler } from "lucide-react";
+import React from "react";
 
-export default function Page() {
+const Page = () => {
   return (
-    <div className="flex items-center justify-center flex-col w-auto max-w-7xl gap-7 mx-auto">
+    <div className="w-full bg-[url('/images/5.svg')] min-h-screen bg-no-repeat bg-cover bg-center pb-20 ">
       <Navbar />
-      <TitleBtn>
-        <PencilRuler /> Welcome home
-      </TitleBtn>
-      <h2 className="euclid text-[56px] text-center max-w-5xl leading-tight">
-        You’re place for you, portfolio, links & more Like a home :)
-      </h2>
-      <p className="text-lg text-[#637381]">
-        An link in bio tool for freelancers, creators
-      </p>
-      <div className=" scale-125 mt-20">
-        <SignUp path="/sign-up" forceRedirectUrl={`/username`} />
-      </div>{" "}
+      <div className="max-w-5xl bg-[#F6F6F6]/[24%] mx-auto backdrop-blur-2xl flex flex-col items-center">
+        <div className="max-w-5xl mx-auto flex flex-col items-center text-center gap-2 my-[50px] p-[24px]">
+          <h1 className="euclid text-3xl md:text-4xl text-[#050401]">
+            Welcome home, let the magic begin.
+          </h1>
+          <p className="text-base text-[#637381] ">sign-up to get started</p>
+        </div>
+        <SignUp path="/sign-up" forceRedirectUrl={`/username`} />;
+      </div>
     </div>
   );
-}
+};
+
+export default Page;

@@ -1,7 +1,7 @@
 "use server";
 
 import connectDb from "@/lib/connectDb";
-import { User } from "@/models/user.model";
+import { User } from "@/models/user.models";
 import metaFetcher from "meta-fetcher";
 
 export const updateUser = async ({

@@ -1,10 +1,11 @@
+import Link from "next/link";
 import React from "react";
 
 const Logo = () => {
   return (
-    <div className="text-3xl euclid bg-gradient-to-r from-[#1300ee] to-[#0b0088] bg-clip-text text-transparent">
-      Brick-Link
-    </div>
+    <Link href="/">
+      <div className="text-2xl euclid text-[#050401]">Cap</div>
+    </Link>
   );
 };
 

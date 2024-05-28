@@ -38,7 +38,7 @@ const Page = () => {
   useEffect(() => {
     setIsSearching(true);
     const checkUser = async () => {
-      if (debouncedSearch) {
+      if (debouncedSearch.length > 2) {
         await connectDb();
         try {
           const existingUser = await checkUsername({
@@ -80,49 +80,64 @@ const Page = () => {
   };
 
   return (
-    <div className="flex items-center justify-center flex-col w-auto max-w-7xl gap-7 mx-auto">
+    <div className="w-full bg-[url('/images/5.svg')] min-h-screen bg-no-repeat bg-cover bg-center pb-10 ">
       <Navbar />
-      <TitleBtn>
-        <PencilRuler />
-        Get your Link
-      </TitleBtn>
-      <h2 className="euclid text-[56px] text-center max-w-5xl leading-tight">
-        Get your Link, Your keys of your home:)
-      </h2>
-      <p className="text-lg text-[#637381]">Claim your URL now</p>
-      <div className="flex bg-[#F4F6F8] px-6 py-2 rounded-lg items-center gap-1">
-        <div className="bg-white p-1 items-center justify-center flex rounded-md h-8">
-          <Link2 />
+      <div className="max-w-5xl bg-[#F6F6F6]/[24%] mx-auto backdrop-blur-2xl flex flex-col items-center">
+        <div className="max-w-5xl mx-auto flex flex-col items-center text-center gap-2 my-[50px] p-[24px]">
+          <h1 className="euclid text-3xl md:text-4xl text-[#050401]">
+            Get your Link, Your keys of your home:)
+          </h1>
+          <p className="text-base text-[#637381] ">Claim your URL now </p>
         </div>
-        <input
-          className="bg-transparent outline-none"
-          onChange={handleChange}
-          value={username}
-        />
-        <button
-          onClick={handleSubmit}
-          className="text-white bg-gradient-to-r from-[#1300ee] to-[#0b0088] px-16 rounded-xl py-3"
-        >
-          Next
-        </button>
+        <div className="flex bg-[#F4F6F8] px-6 rounded-lg items-center gap-1">
+          <input
+            className="bg-transparent outline-none"
+            onChange={handleChange}
+            value={username}
+            placeholder="cap.com/"
+          />
+          <div
+            onClick={handleSubmit}
+            className="cursor-pointer bg-[#141300] my-4 text-[#F0E100] px-7 py-3 rounded-[12px] hover:scale-105 hover:shadow-lg transition-transform ease-in-out block md:hidden"
+          >
+            create
+          </div>
+          <div
+            onClick={handleSubmit}
+            className="cursor-pointer bg-[#141300] my-4 text-[#F0E100] px-7 py-3 rounded-[12px] hover:scale-105 hover:shadow-lg transition-transform ease-in-out hidden md:block"
+          >
+            create you&#39;re link
+          </div>
+        </div>
+        {isSearching && (
+          <div className="flex items-center justify-center mt-4">
+            <PulseLoader color="#000" />
+          </div>
+        )}
+        {!isSearching && usernameAvailable !== null && (
+          <p
+            className={`mt-4 ${
+              usernameAvailable ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {usernameAvailable
+              ? "Username is available!"
+              : "Opps ! This URL is already taken, try again. ."}
+          </p>
+        )}
+        <div className="bg-[#f0f0f0] max-w-[638px] w-auto px-10 rounded-[16px] mx-auto flex flex-col items-center gap-5 py-10 my-10">
+          <div className="h-16 w-16 bg-[#D9D9D9] rounded-[16px]"></div>
+          <h2 className="euclid text-3xl text-[#050401]">
+            {usernameAvailable ? debouncedSearch : "TRY AGAIN !"}
+          </h2>
+          <p className="text-[#637381] text-base">
+            This is how you&#39;re page will appear{" "}
+          </p>
+          <div className="bg-[#011527] text-[#74B8FB] px-7 py-3 rounded-[16px]">
+            Hello world
+          </div>
+        </div>
       </div>
-      {isSearching && (
-        <div className="flex items-center justify-center mt-4">
-          <PulseLoader color="#0b0088" />
-        </div>
-      )}
-      {!isSearching && usernameAvailable !== null && (
-        <p
-          className={`mt-4 ${
-            usernameAvailable ? "text-green-500" : "text-red-500"
-          }`}
-        >
-          {usernameAvailable
-            ? "Username is available!"
-            : "Opps ! This URL is already taken, try again. ."}
-        </p>
-      )}
-      <Image src="/images/1.svg" alt="Illustration" width={1200} height={500} />
     </div>
   );
 };

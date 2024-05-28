@@ -1,6 +1,6 @@
 "use server";
 import connectDb from "@/lib/connectDb";
-import { User } from "@/models/user.model";
+import { User } from "@/models/user.models";
 import { User as _user, clerkClient } from "@clerk/nextjs/server";
 
 export const createUser = async ({

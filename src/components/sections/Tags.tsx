@@ -21,7 +21,7 @@ const Tags: React.FC<TagsProps> = ({
     <div className="flex flex-row gap-5">
       {tags?.map((item: string, index: number) => (
         <div
-          className="bg-white rounded-[24px] px-[32px] text-[#0B0088] text-lg py-2 relative"
+          className="bg-[#050401] border border-[#E4E4E4] rounded-[24px] px-[32px] text-[#F0E100] text-xs py-2 relative"
           key={index}
         >
           {isEditing ? (

@@ -52,12 +52,12 @@ const Edit = () => {
       setLoading(true);
       const response = await fetchUser({ username });
       setUserData(response);
-      setName(response?.name || "");
-      setBio(response?.bio || "bio");
-      setTags(
-        response?.tags || ["Add a tag that represents you ( ex: Founder )"]
-      );
-      setImagesData(response?.images);
+      // setName(response?.name || "");
+      // setBio(response?.bio || "bio");
+      // setTags(
+      //   response?.tags || ["Add a tag that represents you ( ex: Founder )"]
+      // );
+      // setImagesData(response?.images);
 
       const linksResponse = await axios.post("/api/fetchLinks", { username });
       setLinksData(linksResponse.data.links);

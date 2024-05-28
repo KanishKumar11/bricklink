@@ -60,33 +60,33 @@ const Home = () => {
     setImagesData((prevImagesData) => [...prevImagesData, "/images/4.png"]);
   }, []);
 
-  useEffect(() => {
-    const updateAvatar = async () => {
-      if (avatarUpload) {
-        await avatarUpdate({
-          username: user?.username!,
-          avatar: avatarUpload.url,
-        });
-      }
-    };
-    updateAvatar();
-  }, [avatarUpload]);
+  // useEffect(() => {
+  //   const updateAvatar = async () => {
+  //     if (avatarUpload) {
+  //       await avatarUpdate({
+  //         username: user?.username!,
+  //         avatar: avatarUpload.url,
+  //       });
+  //     }
+  //   };
+  //   updateAvatar();
+  // }, [avatarUpload]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (user?.username) {
-        const response = await fetchUser({ username: user.username });
-        setUserData(response);
-        setName(response?.name || "");
-        setBio(response?.bio || "bio");
-        setTags(
-          response?.tags || ["Add a tag that represents you ( ex: Founder )"]
-        );
-      }
-      // setIsLoading(false);
-    };
-    fetchData();
-  }, [user?.username]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (user?.username) {
+  //       const response = await fetchUser({ username: user.username });
+  //       setUserData(response);
+  //       setName(response?.name || "");
+  //       setBio(response?.bio || "bio");
+  //       setTags(
+  //         response?.tags || ["Add a tag that represents you ( ex: Founder )"]
+  //       );
+  //     }
+  //     // setIsLoading(false);
+  //   };
+  //   fetchData();
+  // }, [user?.username]);
 
   const handleEdit = useCallback(async () => {
     if (isEditing) {

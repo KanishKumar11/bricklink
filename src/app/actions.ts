@@ -1,5 +1,6 @@
 "use server";
 
+import { IUser } from "@/interfaces";
 import connectDb from "@/lib/connectDb";
 import { User } from "@/models/user.models";
 import metaFetcher from "meta-fetcher";
@@ -44,19 +45,19 @@ export const avatarUpdate = async ({
 export const fetchUser = async ({ username }: { username: string }) => {
   try {
     await connectDb();
-    const user = (await User.findOne({ username })) as User;
+    const user = (await User.findOne({ username })) as IUser;
     console.log(username);
     console.log(user);
     return {
       username: user.username,
       email: user.email,
-      name: user.name,
-      avatar: user.avatar,
-      bio: user.bio,
-      tags: user.tags,
-      linkSectionTitle: user.linkSectionTitle,
-      imagesSectionTitle: user.imagesSectionTitle,
-      images: user.images,
+      // name: user.name,
+      // avatar: user.avatar,
+      // bio: user.bio,
+      // tags: user.tags,
+      // linkSectionTitle: user.linkSectionTitle,
+      // imagesSectionTitle: user.imagesSectionTitle,
+      // images: user.images,
     };
   } catch (err) {
     console.log(err);
@@ -67,10 +68,10 @@ export const fetchUser = async ({ username }: { username: string }) => {
 export const fetchLinks = async ({ username }: { username: string }) => {
   try {
     await connectDb();
-    const user = (await User.findOne({ username })) as User;
+    const user = (await User.findOne({ username })) as IUser;
     console.log(username);
     console.log(user);
-    return { links: user.links };
+    return { links: "user.links" };
   } catch (err) {
     console.log(err);
     return null;

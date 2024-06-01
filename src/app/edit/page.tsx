@@ -48,7 +48,7 @@ const dummyUserPage: IUserPage = {
     {
       type: "Link",
       data: {
-        link: "https://kanishkumar.in/johndoe",
+        link: "https://kanishkumar.in/",
       },
     },
     {
@@ -81,39 +81,48 @@ const dummyUserPage: IUserPage = {
       type: "Portfolio",
       data: {
         title: "Vista : website design",
-        description: "A collection of my personal projects and contributions.",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         images: ["/images/p1.svg", "/images/p2.svg"],
         subHeading: "UI/UX design for an NFT holding company",
         cta: "Read case study",
-        link: "https://johndoe.com/portfolio",
+        link: "https://instagram.com/portfolio",
       },
     },
     {
       type: "Portfolio",
       data: {
-        title: "Personal Portfolio2",
-        description: "A collection of my personal projects and contributions.",
-        images: [
-          "https://via.placeholder.com/200",
-          "https://via.placeholder.com/200",
-        ],
-        subHeading: "Web Development Projects",
-        cta: "View More",
-        link: "https://johndoe.com/portfolio",
+        title: "Vista : website design",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        images: ["/images/p1.svg", "/images/p2.svg"],
+        subHeading: "UI/UX design for an NFT holding company",
+        cta: "Read case study",
+        link: "https://instagram.com/portfolio",
       },
     },
     {
       type: "Portfolio",
       data: {
-        title: "Personal Portfolio3",
-        description: "A collection of my personal projects and contributions.",
-        images: [
-          "https://via.placeholder.com/200",
-          "https://via.placeholder.com/200",
-        ],
-        subHeading: "Web Development Projects",
-        cta: "View More",
-        link: "https://johndoe.com/portfolio",
+        title: "Vista : website design",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        images: ["/images/p1.svg", "/images/p2.svg"],
+        subHeading: "UI/UX design for an NFT holding company",
+        cta: "Read case study",
+        link: "https://instagram.com/portfolio",
+      },
+    },
+    {
+      type: "Portfolio",
+      data: {
+        title: "Vista : website design",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        images: ["/images/p1.svg"],
+        subHeading: "UI/UX design for an NFT holding company",
+        cta: "Read case study",
+        link: "https://instagram.com/portfolio",
       },
     },
   ],

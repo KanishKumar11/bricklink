@@ -1,11 +1,11 @@
-<svg width="260" height="177" viewBox="0 0 260 177" fill="none" xmlns="http://www.w3.org/2000/svg"
+<svg width="248" height="151" viewBox="0 0 248 151" fill="none" xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <g filter="url(#filter0_dd_2972_1454)">
-    <rect x="34.9473" y="7.91797" width="207.319" height="109.84" rx="8" transform="rotate(7.98386 34.9473 7.91797)"
-      fill="url(#pattern0_2972_1454)" shape-rendering="crispEdges" />
+    <rect x="20.3145" y="8.7832" width="207.319" height="109.84" rx="8" fill="url(#pattern0_2972_1454)"
+      shape-rendering="crispEdges" />
   </g>
   <defs>
-    <filter id="filter0_dd_2972_1454" x="0.724609" y="0.951172" width="258.5" height="175.506"
+    <filter id="filter0_dd_2972_1454" x="0.314453" y="0.783203" width="247.318" height="149.84"
       filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
       <feFlood flood-opacity="0" result="BackgroundImageFix" />
       <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"

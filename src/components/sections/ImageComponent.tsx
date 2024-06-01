@@ -8,8 +8,8 @@ const ImageComponent: React.FC<IImage> = ({ imageUrl, height, width }) => (
     <Image
       src={imageUrl}
       alt="User Image"
-      width={width}
-      height={height}
+      width={width || 500}
+      height={height || 500}
       style={{ width, height }}
     />
   </div>

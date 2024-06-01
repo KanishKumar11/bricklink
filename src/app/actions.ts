@@ -4,7 +4,7 @@ import { IUser } from "@/interfaces";
 import connectDb from "@/lib/connectDb";
 import { User } from "@/models/user.models";
 import metaFetcher from "meta-fetcher";
-
+import { v2 as cloudinary } from "cloudinary";
 export const updateUser = async ({
   username,
   update,
@@ -82,4 +82,28 @@ export const fetchMetaData = async (url: string) => {
   const result = await metaFetcher(url);
   console.log(result);
   return result;
+};
+
+export const cloudinaryUpload = async (file: File) => {
+  cloudinary.config({
+    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "ml_default");
+
+  console.log(file);
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const data = await response.json();
+  console.log(data);
+  return data;
 };

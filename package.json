@@ -10,11 +10,16 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.12",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-scroll-area": "^1.0.5",
+    "@radix-ui/react-slot": "^1.0.2",
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.2.0",
     "clsx": "^2.1.1",
+    "formidable": "^3.5.1",
     "lucide-react": "^0.378.0",
     "meta-fetcher": "^3.1.1",
     "mongoose": "^8.4.0",
@@ -32,6 +37,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/formidable": "^3.4.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-beautiful-dnd": "^13.1.8",

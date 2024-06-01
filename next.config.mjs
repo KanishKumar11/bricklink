@@ -9,6 +9,9 @@ const nextConfig = {
       {
         hostname: "via.placeholder.com",
       },
+      {
+        hostname: "res.cloudinary.com",
+      },
     ],
   },
 };

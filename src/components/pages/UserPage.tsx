@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   DragDropContext,
@@ -21,11 +22,10 @@ import TextComponent from "@/components/sections/TextComponent";
 import HeadingComponent from "@/components/sections/HeadingComponent";
 import PortfolioComponent from "@/components/sections/PortfolioComponent";
 import AvatarUpload from "../sections/AvatarUpload";
-import { IoMdColorPalette } from "react-icons/io";
-import { Save } from "lucide-react";
-import { BiSolidPencil } from "react-icons/bi";
-import { FaShareAlt } from "react-icons/fa";
-import { fetchUser, updateUser } from "@/app/actions";
+import { IoMdImage } from "react-icons/io";
+import { BiSolidPencil, BiSolidQuoteRight } from "react-icons/bi";
+import { FaHeading, FaQuoteRight, FaShareAlt } from "react-icons/fa";
+import { cloudinaryUpload, fetchUser, updateUser } from "@/app/actions";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -33,6 +33,31 @@ import Bio from "../sections/Bio";
 import Tags from "../sections/Tags";
 import Image from "next/image";
 import Link from "next/link";
+import { CgCross } from "react-icons/cg";
+import { FaCross } from "react-icons/fa6";
+import { HiOutlinePlus } from "react-icons/hi";
+import { RxCross2 } from "react-icons/rx";
+import {
+  MdOutlinePanoramaHorizontalSelect,
+  MdTextFields,
+} from "react-icons/md";
+import { IoLinkSharp } from "react-icons/io5";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogOverlay,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Plus } from "lucide-react";
+import { Button } from "../ui/button";
+import { CldUploadButton, CldUploadWidget } from "next-cloudinary";
+import { RiUploadLine } from "react-icons/ri";
+import axios from "axios";
 
 interface UserPageProps {
   page: IUserPage;
@@ -40,7 +65,6 @@ interface UserPageProps {
 }
 
 const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
-  // const { user } = useUser();
   const [components, setComponents] = useState<IComponent[]>(page.components);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [newComponentType, setNewComponentType] = useState<string>("");
@@ -52,6 +76,9 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
   const [bio, setBio] = useState<string>("");
   const [bioError, setBioError] = useState<string | null>(null);
   const [tags, setTags] = useState<any>([]);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
   const renderComponent = (component: IComponent, index: number) => {
     if (editIndex === index) {
       return renderEditForm(component, index);
@@ -84,6 +111,178 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
     setComponents([...components, newComponent]);
     setNewComponentType("");
     setNewComponentData({});
+    setIsDialogOpen(false);
+  };
+  const handleElementClick = (type: string) => {
+    // if (type === "Image") {
+    //   openCloudinaryUploadWidget();
+    // } else {
+    setNewComponentType(type);
+    setIsDialogOpen(true);
+    // }
+  };
+
+  // const openCloudinaryUploadWidget = () => {
+  //   <CldUploadButton
+  //     signatureEndpoint="/api/sign-cloudinary-params"
+  //     uploadPreset="ml_default"
+  //     // onOpen={() => setIsDialogOpen(true)}
+  //     // onClick={() => setIsDialogOpen(true)}
+  //     onSuccess={(result, { widget }) => {
+  //       setNewComponentData({ imageUrl: result?.info });
+  //       widget.close();
+  //     }}
+  //   >
+  //     <div className="h-[96px] w-[96px] bg-[#000000] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-xs leading-5 text-center gap-3 p-2 fixed top-[50%] z-[952545965]">
+  //       <span className="bg-[#a0a4a8] text-[#F5F3F3] p-2 rounded-md text-sm">
+  //         <RiUploadLine />
+  //       </span>
+  //       upload
+  //     </div>
+  //   </CldUploadButton>;
+  // };
+
+  const renderDialogContent = () => {
+    switch (newComponentType) {
+      case "Text":
+        return (
+          <>
+            <Label>Text</Label>
+            <Input
+              value={newComponentData.text || ""}
+              onChange={(e) => setNewComponentData({ text: e.target.value })}
+            />
+          </>
+        );
+
+      case "Heading":
+        return (
+          <>
+            <Label>Heading</Label>
+            <Input
+              value={newComponentData.heading || ""}
+              onChange={(e) => setNewComponentData({ heading: e.target.value })}
+            />
+          </>
+        );
+
+      case "Image":
+        return (
+          <>
+            {/* <CldUploadButton
+              signatureEndpoint="/api/sign-cloudinary-params"
+              uploadPreset="ml_default"
+              onOpen={() => setIsDialogOpen(true)}
+              onClick={() => setUploadOpen(true)}
+              onSuccess={(result, { widget }) => {
+                setNewComponentData({ imageUrl: result?.info });
+                widget.close();
+              }}
+            >
+              <div className="h-[96px] w-[96px] bg-[#F5F3F3] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-xs leading-5 text-center gap-3 p-2 ">
+                <span className="bg-[#a0a4a8] text-[#F5F3F3] p-2 rounded-md text-sm">
+                  <RiUploadLine />
+                </span>
+                upload
+              </div>
+            </CldUploadButton> */}
+            {/* {uploadOpen && (
+              <DialogOverlay>
+                <CldUploadWidget
+                  signatureEndpoint="/api/sign-cloudinary-params"
+                  uploadPreset="ml_default"
+                  onSuccess={(result, { widget }) => {
+                    setNewComponentData({ imageUrl: result?.info });
+                    widget.close();
+                  }}
+                />
+              </DialogOverlay>
+            )} */}
+            <div>
+              <Label>Upload Image</Label>
+              <Input
+                type="file"
+                accept=".png,.jpg,jpeg,.svg,.webp"
+                onChange={async (e) => {
+                  if (e.target.files) {
+                    const file = e.target?.files[0];
+
+                    if (file) {
+                      const formData = new FormData();
+                      formData.append("file", file);
+
+                      try {
+                        console.log("trying...");
+                        const response = await axios.post(
+                          "/api/cloudinaryUpload",
+                          formData,
+                          {
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                            },
+                          }
+                        );
+                        console.log("res", response);
+                        if (response.status === 200) {
+                          console.log("status");
+                          const data = response.data;
+                          const imageUrl = data.cloudinaryResponse.secure_url;
+                          console.log(imageUrl);
+                          setNewComponentType("Image");
+                          setNewComponentData({
+                            imageUrl,
+                          });
+                        } else {
+                          console.error("Error uploading file");
+                        }
+                      } catch (error) {
+                        console.error("Error uploading file", error);
+                      }
+                    }
+                  }
+                }}
+              />
+            </div>
+            {newComponentData?.imageUrl && (
+              <Image
+                src={newComponentData.imageUrl}
+                width="300"
+                height={300}
+                alt=""
+              />
+            )}
+          </>
+        );
+      case "Link":
+        return (
+          <>
+            <Label>Link</Label>
+            <Input
+              value={newComponentData.link || ""}
+              onChange={(e) => setNewComponentData({ link: e.target.value })}
+            />
+          </>
+        );
+      case "Portfolio":
+        return (
+          <>
+            <Label>Portfolio Title</Label>
+            <Input
+              value={newComponentData.title || ""}
+              onChange={(e) => setNewComponentData({ title: e.target.value })}
+            />
+            <Label>Portfolio Description</Label>
+            <Input
+              value={newComponentData.description || ""}
+              onChange={(e) =>
+                setNewComponentData({ description: e.target.value })
+              }
+            />
+          </>
+        );
+      default:
+        return null;
+    }
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -237,33 +436,11 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
         return null;
     }
   };
-  // const fetchUserData = async (username: string) => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await fetchUser({ username });
-  //     setUserData(response);
-  //     setName(response?.name || "");
-  //     setBio(response?.bio || "bio");
-  //     setTags(
-  //       response?.tags || ["Add a tag that represents you ( ex: Founder )"]
-  //     );
-  //     // setImagesData(response?.images);
-
-  //     // const linksResponse = await axios.post("/api/fetchLinks", { username });
-  //     // setLinksData(linksResponse.data.links);
-  //   } catch (error) {
-  //     console.error("Failed to fetch user data:", error);
-  //     toast.error("Failed to fetch user data");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (user?.username && !userData) {
-  //     fetchUserData(user.username);
-  //   }
-  // }, [user?.username, userData]);
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setNewComponentType("");
+    setNewComponentData({});
+  };
 
   const handleEdit = useCallback(async () => {
     if (isEditing) {
@@ -326,7 +503,7 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
   return (
     <div className="max-w-5xl mx-auto">
       <div className="bg-white  px-[80px] pt-[20px] pb-[80px] rounded-b-[40px] w-full flex flex-col items-center gap-5 max-w-5xl mx-auto">
-        <div className="bg-[#F4F6F8] px-[56px] z-[15] fixed rounded-[16px] py-[16px] flex items-center justify-between mx-auto max-w-7xl w-full">
+        <div className="bg-[#F4F6F8] px-[56px] z-[15] fixed rounded-[16px] py-[16px] flex items-center justify-between mx-auto max-w-5xl w-full">
           <div className="flex gap-2 flex-row items-center">
             <Image
               src={userData?.avatar || "/images/4.png"}
@@ -399,7 +576,7 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className="flex items-center gap-5 flex-row w-full justify-between flex-wrap max-w-5xl mx-auto"
+              className="flex items-center gap-5 flex-row w-full justify-center lg:justify-between flex-wrap max-w-5xl mx-auto mb-20"
             >
               {components.map((component, index) => (
                 <Draggable
@@ -425,8 +602,9 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
           )}
         </Droppable>
       </DragDropContext>
+
       <div>
-        <h3>Add New Component</h3>
+        {/* <h3>Add New Component</h3>
         <select
           value={newComponentType}
           onChange={(e) => setNewComponentType(e.target.value)}
@@ -437,7 +615,7 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
           <option value="Text">Text</option>
           <option value="Heading">Heading</option>
           <option value="Portfolio">Portfolio</option>
-        </select>
+        </select> */}
         {newComponentType && (
           <div>
             {newComponentType === "Link" && (
@@ -644,6 +822,89 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
         )}
         <button onClick={handleAddComponent}>Add Component</button>
       </div>
+      <div className=" w-full max-w-5xl bg-white/[26%] flex items-center justify-center fixed p-5 backdrop-blur-sm rounded-xl flex-col bottom-0 mx-auto z-50 gap-5">
+        {isActive && (
+          <div className="w-full flex flex-row flex-wrap items-center justify-center gap-8 text-xs">
+            <div
+              className="bg-[#520F00] flex gap-1 text-[#FFD4CA] rounded-[8px] h-[42px] px-5 justify-center items-center cursor-pointer"
+              onClick={() => handleElementClick("Portfolio")}
+            >
+              <span className="text-base">
+                {" "}
+                <MdOutlinePanoramaHorizontalSelect />
+              </span>{" "}
+              portfolio
+            </div>
+            <div
+              className="bg-[#021F3B] flex gap-1 text-[#74B8FB] rounded-[8px] h-[42px] px-5 justify-center items-center cursor-pointer"
+              onClick={() => handleElementClick("Image")}
+            >
+              <span className="text-base">
+                {" "}
+                <IoMdImage />
+              </span>{" "}
+              Image
+            </div>{" "}
+            <div
+              className="bg-[#3D3900] flex gap-1 text-[#F0E100] rounded-[8px] h-[42px] px-5 justify-center items-center cursor-pointer"
+              onClick={() => handleElementClick("Link")}
+            >
+              <span className="text-base">
+                {" "}
+                <IoLinkSharp />
+              </span>{" "}
+              Links
+            </div>{" "}
+            <div
+              className="bg-[#42424D] flex gap-1 text-[#C8C8D0] rounded-[8px] h-[42px] px-5 justify-center items-center cursor-pointer"
+              onClick={() => handleElementClick("Heading")}
+            >
+              <span className="text-xs">
+                {" "}
+                <MdTextFields />
+              </span>{" "}
+              Title
+            </div>
+            <div
+              className="bg-[#0F2E23] flex gap-1 text-[#32936F] rounded-[8px] h-[42px] px-5 justify-center items-center cursor-pointer"
+              onClick={() => handleElementClick("Text")}
+            >
+              <span className="text-xs">
+                {" "}
+                <BiSolidQuoteRight />
+              </span>{" "}
+              Text
+            </div>
+          </div>
+        )}
+        <div className="px-5 py-3 rounded-[16px] bg-[#E7E5E5] flex flex-row gap-2">
+          <div
+            className="bg-[#050401] text-[#f0e100] rounded-[8px] text-sm p-2 cursor-pointer"
+            onClick={() => setIsActive(!isActive)}
+          >
+            {isActive ? <RxCross2 /> : <HiOutlinePlus />}
+          </div>
+          <div className="bg-[#050401] text-xs text-[#f0e100] flex items-center justify-center rounded-[8px] py-2 px-8">
+            {" "}
+            Share
+          </div>
+        </div>
+      </div>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="z-[98989] ">
+          <DialogHeader>
+            <DialogTitle>Add New Component</DialogTitle>
+            <DialogDescription>
+              Provide the necessary details for the new component.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-5">
+            {renderDialogContent()}
+            <Button onClick={handleAddComponent}>Add</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

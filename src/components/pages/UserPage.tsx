@@ -20,7 +20,9 @@ import ImageComponent from "@/components/sections/ImageComponent";
 import LinkComponent from "@/components/sections/LinkComponent";
 import TextComponent from "@/components/sections/TextComponent";
 import HeadingComponent from "@/components/sections/HeadingComponent";
-import PortfolioComponent from "@/components/sections/PortfolioComponent";
+import PortfolioComponent, {
+  PComponent,
+} from "@/components/sections/PortfolioComponent";
 import AvatarUpload from "../sections/AvatarUpload";
 import { IoMdImage } from "react-icons/io";
 import { BiSolidPencil, BiSolidQuoteRight } from "react-icons/bi";
@@ -53,11 +55,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import { Button } from "../ui/button";
-import { CldUploadButton, CldUploadWidget } from "next-cloudinary";
-import { RiUploadLine } from "react-icons/ri";
 import axios from "axios";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "../ui/textarea";
 
 interface UserPageProps {
   page: IUserPage;
@@ -78,7 +80,12 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
   const [tags, setTags] = useState<any>([]);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [uploadOpen, setUploadOpen] = useState(false);
+  const [isBackend, setIsBackend] = useState(false);
+  const [isPortfolio, setIsPortfolio] = useState(false);
+  const [pImg1, setPImg1] = useState<any>();
+  const [pImg2, setPImg2] = useState<any>();
+  const [isPortfolioLink, setIsPortfolioLink] = useState(false);
+
   const renderComponent = (component: IComponent, index: number) => {
     if (editIndex === index) {
       return renderEditForm(component, index);
@@ -94,7 +101,7 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
       case "Heading":
         return <HeadingComponent {...(component.data as IHeading)} />;
       case "Portfolio":
-        return <PortfolioComponent {...(component.data as IPortfolio)} />;
+        return <PortfolioComponent {...(component.data as PComponent)} />;
       default:
         return null;
     }
@@ -114,35 +121,20 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
     setIsDialogOpen(false);
   };
   const handleElementClick = (type: string) => {
-    // if (type === "Image") {
-    //   openCloudinaryUploadWidget();
-    // } else {
+    if (type == "Portfolio") {
+      setIsPortfolio(true);
+    }
+
+    setNewComponentData({});
     setNewComponentType(type);
     setIsDialogOpen(true);
-    // }
   };
 
-  // const openCloudinaryUploadWidget = () => {
-  //   <CldUploadButton
-  //     signatureEndpoint="/api/sign-cloudinary-params"
-  //     uploadPreset="ml_default"
-  //     // onOpen={() => setIsDialogOpen(true)}
-  //     // onClick={() => setIsDialogOpen(true)}
-  //     onSuccess={(result, { widget }) => {
-  //       setNewComponentData({ imageUrl: result?.info });
-  //       widget.close();
-  //     }}
-  //   >
-  //     <div className="h-[96px] w-[96px] bg-[#000000] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-xs leading-5 text-center gap-3 p-2 fixed top-[50%] z-[952545965]">
-  //       <span className="bg-[#a0a4a8] text-[#F5F3F3] p-2 rounded-md text-sm">
-  //         <RiUploadLine />
-  //       </span>
-  //       upload
-  //     </div>
-  //   </CldUploadButton>;
-  // };
-
   const renderDialogContent = () => {
+    const validatePortfolioFields = () => {
+      return newComponentData.title && newComponentData.subHeading && pImg1;
+    };
+
     switch (newComponentType) {
       case "Text":
         return (
@@ -150,7 +142,12 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
             <Label>Text</Label>
             <Input
               value={newComponentData.text || ""}
-              onChange={(e) => setNewComponentData({ text: e.target.value })}
+              onChange={(e) =>
+                setNewComponentData({
+                  ...newComponentData,
+                  text: e.target.value,
+                })
+              }
             />
           </>
         );
@@ -158,10 +155,15 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
       case "Heading":
         return (
           <>
-            <Label>Heading</Label>
+            <Label className="mt-5">Title</Label>
             <Input
               value={newComponentData.heading || ""}
-              onChange={(e) => setNewComponentData({ heading: e.target.value })}
+              onChange={(e) =>
+                setNewComponentData({
+                  ...newComponentData,
+                  heading: e.target.value,
+                })
+              }
             />
           </>
         );
@@ -169,35 +171,6 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
       case "Image":
         return (
           <>
-            {/* <CldUploadButton
-              signatureEndpoint="/api/sign-cloudinary-params"
-              uploadPreset="ml_default"
-              onOpen={() => setIsDialogOpen(true)}
-              onClick={() => setUploadOpen(true)}
-              onSuccess={(result, { widget }) => {
-                setNewComponentData({ imageUrl: result?.info });
-                widget.close();
-              }}
-            >
-              <div className="h-[96px] w-[96px] bg-[#F5F3F3] flex flex-col items-center justify-center text-black rounded-xl mx-auto text-wrap text-xs leading-5 text-center gap-3 p-2 ">
-                <span className="bg-[#a0a4a8] text-[#F5F3F3] p-2 rounded-md text-sm">
-                  <RiUploadLine />
-                </span>
-                upload
-              </div>
-            </CldUploadButton> */}
-            {/* {uploadOpen && (
-              <DialogOverlay>
-                <CldUploadWidget
-                  signatureEndpoint="/api/sign-cloudinary-params"
-                  uploadPreset="ml_default"
-                  onSuccess={(result, { widget }) => {
-                    setNewComponentData({ imageUrl: result?.info });
-                    widget.close();
-                  }}
-                />
-              </DialogOverlay>
-            )} */}
             <div>
               <Label>Upload Image</Label>
               <Input
@@ -228,10 +201,10 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
                           const data = response.data;
                           const imageUrl = data.cloudinaryResponse.secure_url;
                           console.log(imageUrl);
-                          setNewComponentType("Image");
-                          setNewComponentData({
+                          setNewComponentData((prevData: any) => ({
+                            ...prevData,
                             imageUrl,
-                          });
+                          }));
                         } else {
                           console.error("Error uploading file");
                         }
@@ -253,33 +226,276 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
             )}
           </>
         );
+
       case "Link":
         return (
           <>
             <Label>Link</Label>
             <Input
               value={newComponentData.link || ""}
-              onChange={(e) => setNewComponentData({ link: e.target.value })}
-            />
-          </>
-        );
-      case "Portfolio":
-        return (
-          <>
-            <Label>Portfolio Title</Label>
-            <Input
-              value={newComponentData.title || ""}
-              onChange={(e) => setNewComponentData({ title: e.target.value })}
-            />
-            <Label>Portfolio Description</Label>
-            <Input
-              value={newComponentData.description || ""}
               onChange={(e) =>
-                setNewComponentData({ description: e.target.value })
+                setNewComponentData({
+                  ...newComponentData,
+                  link: e.target.value,
+                })
               }
             />
           </>
         );
+
+      case "Portfolio":
+        return (
+          <>
+            {!isBackend ? (
+              <>
+                <div className="px-5 flex flex-col gap-5 items-start">
+                  <h2 className="text-center euclid text-3xl mx-auto">
+                    Setting Portfolio
+                  </h2>
+                  <div className="flex flex-row items-center flex-wrap">
+                    <div className="px-8 py-3 bg-[#050401] rounded-[16px] text-[#F0E100] stroke-[#E4E4E4]">
+                      Step 1: front-end
+                    </div>
+                    <div className="h- border-2 border-dashed w-[100px] bg-[E5E8EB]" />
+                    <div className="px-8 py-3 bg-[#F9FAFB] rounded-[16px]  stroke-[#E4E4E4] text-[#050401]">
+                      Step 2: Back-end
+                    </div>
+                  </div>
+
+                  <div className="bg-[#F4F6F8] rounded-[16px] min-h-[100px] max-h-[400px] min-w-[100px]">
+                    <PortfolioComponent
+                      title={newComponentData.title || ""}
+                      subHeading={newComponentData.subHeading || ""}
+                      description={newComponentData.description || ""}
+                      images={newComponentData.images || []}
+                      isPreview={true}
+                    />
+                  </div>
+                  <Label>Portfolio Title*</Label>
+                  <Input
+                    value={newComponentData.title || ""}
+                    required
+                    onChange={(e) => {
+                      setNewComponentData({
+                        ...newComponentData,
+                        title: e.target.value,
+                      });
+                    }}
+                  />
+                  <Label>Portfolio Description*</Label>
+                  <Input
+                    required
+                    value={newComponentData.subHeading || ""}
+                    onChange={(e) =>
+                      setNewComponentData({
+                        ...newComponentData,
+                        subHeading: e.target.value,
+                      })
+                    }
+                  />
+                  <div className="flex flex-row gap-5 lg:flex-nowrap flex-wrap">
+                    <div>
+                      <Label>Upload Image 1*</Label>
+                      <Input
+                        type="file"
+                        accept=".png,.jpg,jpeg,.svg,.webp"
+                        onChange={async (e) => {
+                          if (e.target.files) {
+                            const file = e.target?.files[0];
+
+                            if (file) {
+                              const formData = new FormData();
+                              formData.append("file", file);
+
+                              try {
+                                console.log("trying...");
+                                const response = await axios.post(
+                                  "/api/cloudinaryUpload",
+                                  formData,
+                                  {
+                                    headers: {
+                                      "Content-Type": "multipart/form-data",
+                                    },
+                                  }
+                                );
+                                console.log("res", response);
+                                if (response.status === 200) {
+                                  console.log("status");
+                                  const data = response.data;
+                                  const imageUrl =
+                                    data.cloudinaryResponse.secure_url;
+                                  console.log(imageUrl);
+                                  setPImg1(imageUrl);
+                                  setNewComponentData((prevData: any) => ({
+                                    ...prevData,
+                                    images: [
+                                      ...(prevData.images || []),
+                                      imageUrl,
+                                    ],
+                                  }));
+                                } else {
+                                  console.error("Error uploading file");
+                                }
+                              } catch (error) {
+                                console.error("Error uploading file", error);
+                              }
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label>Upload Image 2</Label>
+                      <Input
+                        type="file"
+                        accept=".png,.jpg,jpeg,.svg,.webp"
+                        onChange={async (e) => {
+                          if (e.target.files) {
+                            const file = e.target?.files[0];
+
+                            if (file) {
+                              const formData = new FormData();
+                              formData.append("file", file);
+
+                              try {
+                                console.log("trying...");
+                                const response = await axios.post(
+                                  "/api/cloudinaryUpload",
+                                  formData,
+                                  {
+                                    headers: {
+                                      "Content-Type": "multipart/form-data",
+                                    },
+                                  }
+                                );
+                                console.log("res", response);
+                                if (response.status === 200) {
+                                  console.log("status");
+                                  const data = response.data;
+                                  const imageUrl =
+                                    data.cloudinaryResponse.secure_url;
+                                  console.log(imageUrl);
+                                  setPImg2(imageUrl);
+                                  setNewComponentData((prevData: any) => ({
+                                    ...prevData,
+                                    images: [
+                                      ...(prevData.images || []),
+                                      imageUrl,
+                                    ],
+                                  }));
+                                } else {
+                                  console.error("Error uploading file");
+                                }
+                              } catch (error) {
+                                console.error("Error uploading file", error);
+                              }
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-5 flex-row flex-wrap w-full">
+                    <Button
+                      onClick={() => {
+                        setIsDialogOpen(false);
+                        setIsPortfolio(false);
+                      }}
+                      variant={"outline"}
+                      className="px-5"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className="flex-1 w-full flex text-[#F0E100]"
+                      onClick={() => {
+                        if (validatePortfolioFields()) {
+                          setIsBackend(true);
+                        } else {
+                          toast.error("Please fill all required fields.");
+                        }
+                      }}
+                    >
+                      Continue
+                    </Button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-[#001122] flex gap-5 items-center text-center justify-center flex-col p-5">
+                  <div>
+                    {" "}
+                    <h2 className="euclid text-xl font-medium">
+                      {newComponentData.title}
+                    </h2>
+                    <p className="text-xs">{newComponentData.subHeading}</p>
+                  </div>{" "}
+                </div>
+                <Label>Description</Label>
+                <Textarea
+                  value={newComponentData.description || ""}
+                  onChange={(e) =>
+                    setNewComponentData({
+                      ...newComponentData,
+                      description: e.target.value,
+                    })
+                  }
+                />
+                {isPortfolioLink ? (
+                  <div className="">
+                    <Label>Link</Label>
+                    <Input
+                      value={newComponentData.link || ""}
+                      onChange={(e) =>
+                        setNewComponentData({
+                          ...newComponentData,
+                          link: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div
+                      className="bg-[#3D3900] flex gap-1 text-[#F0E100] rounded-[8px] h-[42px] px-5 justify-center items-center cursor-pointer max-w-max mx-auto"
+                      onClick={() => setIsPortfolioLink(true)}
+                    >
+                      <span className="text-base">
+                        {" "}
+                        <IoLinkSharp />
+                      </span>{" "}
+                      Links
+                    </div>{" "}
+                  </>
+                )}
+                <div className="gap-5 flex flex-row flex-wrap">
+                  <Button
+                    onClick={() => setIsBackend(false)}
+                    variant={"outline"}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    className="flex-1 w-full text-[#F0E100]"
+                    onClick={() => {
+                      if (validatePortfolioFields()) {
+                        handleAddComponent();
+                        setIsPortfolio(false);
+                        setIsBackend(false);
+                      } else {
+                        alert("Please fill all required fields.");
+                      }
+                    }}
+                  >
+                    Create your portfolio
+                  </Button>
+                </div>
+              </>
+            )}
+          </>
+        );
+
       default:
         return null;
     }
@@ -441,7 +657,10 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
     setNewComponentType("");
     setNewComponentData({});
   };
-
+  const handleComponentDelete = (index: number) => {
+    console.log(index);
+    setComponents((prev) => prev.filter((_, i) => i !== index));
+  };
   const handleEdit = useCallback(async () => {
     if (isEditing) {
       toast.loading("Updating...");
@@ -466,6 +685,7 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
     .string()
     .min(1)
     .max(150 * 5, "Bio must be 150 words or less");
+
   const handleNewTag = useCallback(() => {
     setTags((prevTags: [string]) => [
       ...prevTags,
@@ -589,10 +809,21 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className="flex items-center justify-between flex-row flex-wrap"
+                      className="flex items-center justify-between flex-row flex-wrap relative"
                     >
                       {renderComponent(component, index)}
                       {/* <button onClick={() => setEditIndex(index)}>Edit</button> */}
+                      <div className="absolute top-1 right-1 flex flex-row gap-2">
+                        <div className=" p-1 flex items-center justify-center rounded-full border border-gray-900 hover:translate-y-2 ease-in-out transition-transform hover:shadow-md">
+                          <Pencil className="h-3 w-3" />
+                        </div>
+                        <div
+                          className=" p-1 flex items-center justify-center rounded-full border border-gray-900 hover:translate-y-2 ease-in-out transition-transform hover:shadow-md"
+                          onClick={() => handleComponentDelete(index)}
+                        >
+                          <Trash className="h-3 w-3" />
+                        </div>
+                      </div>
                     </div>
                   )}
                 </Draggable>
@@ -604,18 +835,6 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
       </DragDropContext>
 
       <div>
-        {/* <h3>Add New Component</h3>
-        <select
-          value={newComponentType}
-          onChange={(e) => setNewComponentType(e.target.value)}
-        >
-          <option value="">Select Component Type</option>
-          <option value="Link">Link</option>
-          <option value="Image">Image</option>
-          <option value="Text">Text</option>
-          <option value="Heading">Heading</option>
-          <option value="Portfolio">Portfolio</option>
-        </select> */}
         {newComponentType && (
           <div>
             {newComponentType === "Link" && (
@@ -820,7 +1039,6 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
             )}
           </div>
         )}
-        <button onClick={handleAddComponent}>Add Component</button>
       </div>
       <div className=" w-full max-w-5xl bg-white/[26%] flex items-center justify-center fixed p-5 backdrop-blur-sm rounded-xl flex-col bottom-0 mx-auto z-50 gap-5">
         {isActive && (
@@ -891,18 +1109,22 @@ const UserPage: React.FC<UserPageProps> = ({ page, user }) => {
         </div>
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="z-[98989] ">
-          <DialogHeader>
-            <DialogTitle>Add New Component</DialogTitle>
-            <DialogDescription>
-              Provide the necessary details for the new component.
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="z-[98989] w-auto md:max-w-5xl h-auto p-5">
+          <ScrollArea className="max-h-[80vh] ">
+            <DialogHeader>
+              <DialogTitle>Add New Component</DialogTitle>
+              <DialogDescription>
+                Provide the necessary details for the new component.
+              </DialogDescription>
+            </DialogHeader>
 
-          <div className="flex flex-col gap-5">
-            {renderDialogContent()}
-            <Button onClick={handleAddComponent}>Add</Button>
-          </div>
+            <div className="flex flex-col gap-5 mt-5 px-5 ">
+              {renderDialogContent()}
+              {!isPortfolio && (
+                <Button onClick={handleAddComponent}>Add</Button>
+              )}{" "}
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </div>

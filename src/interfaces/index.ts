@@ -27,8 +27,8 @@ export interface IPortfolio {
   description: string;
   images: string[];
   subHeading: string;
-  cta: string;
-  link: string;
+  cta?: string;
+  link?: string;
 }
 
 // Define user and user page interfaces

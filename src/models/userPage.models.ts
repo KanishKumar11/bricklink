@@ -76,8 +76,8 @@ const PortfolioSchema: Schema = new Schema({
   description: { type: String, required: true },
   images: [{ type: String, required: true }],
   subHeading: { type: String, required: true },
-  cta: { type: String, required: true },
-  link: { type: String, required: true },
+  cta: { type: String, required: false },
+  link: { type: String, required: false },
 });
 
 // UserPage schema

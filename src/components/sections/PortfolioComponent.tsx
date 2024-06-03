@@ -13,13 +13,18 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import LinkComponent from "./LinkComponent";
 
-const PortfolioComponent: React.FC<IPortfolio> = ({
+export interface PComponent extends IPortfolio {
+  isPreview?: boolean;
+}
+
+const PortfolioComponent: React.FC<PComponent> = ({
   title,
   description,
   images,
   subHeading,
   cta,
   link,
+  isPreview = false,
 }) => {
   console.log(images.length);
   return (
@@ -41,20 +46,22 @@ const PortfolioComponent: React.FC<IPortfolio> = ({
             className={`${
               images.length == 2
                 ? index == 0
-                  ? "-rotate-6 h-[305px] w-[286px]"
-                  : "rotate-6 h-[220px] self-end w-[220px] -ml-20"
+                  ? "-rotate-6 h-[205px] w-[286px]"
+                  : "rotate-6 h-[180px] self-end w-[220px] -ml-20 rounded-lg"
                 : "rotate-0 w-[400px] h-[305px]"
-            } drop-shadow-lg`}
+            } drop-shadow-lg rounded-lg my-3`}
           />
         ))}
       </div>
       {/* <h3>{subHeading}</h3> */}
       <Sheet>
-        <SheetTrigger>
-          <div className="bg-black text-white rounded-xl px-5 py-2 relative z-10">
-            {cta || "Read more"}
-          </div>
-        </SheetTrigger>
+        {!isPreview && (
+          <SheetTrigger>
+            <div className="bg-black text-white rounded-xl px-5 py-2 relative z-10">
+              {cta || "Read more"}
+            </div>
+          </SheetTrigger>
+        )}
         <SheetContent
           side={"bottom"}
           className="py-16 max-h-[85vh]  rounded-[24px] max-w-5xl mx-auto flex flex-col items-center justify-center text-center"
@@ -66,7 +73,7 @@ const PortfolioComponent: React.FC<IPortfolio> = ({
               </SheetTitle>
               <p className="text-xs text-center">{subHeading}</p>
               <SheetDescription>
-                <div className="flex flex-row -mb-12 mx-auto  max-w-max">
+                <div className="flex flex-row -mb-5 mx-auto  max-w-max mt-5">
                   {" "}
                   {images.map((image, index) => (
                     <Image
@@ -86,9 +93,11 @@ const PortfolioComponent: React.FC<IPortfolio> = ({
                   ))}
                 </div>
                 <p className="text-lg text-center mt-10">{description}</p>
-                <div className="my-5 self-center justify-center flex items-center">
-                  <LinkComponent link={link} />
-                </div>
+                {link && (
+                  <div className="my-5 self-center justify-center flex items-center">
+                    <LinkComponent link={link} />
+                  </div>
+                )}
               </SheetDescription>
             </SheetHeader>
           </ScrollArea>
